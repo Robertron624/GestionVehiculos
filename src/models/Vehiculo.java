@@ -11,7 +11,7 @@ public class Vehiculo {
         NUEVO, USADO
     }
 
-    private String id;
+    private int id;
     private String marca;
     private String modelo;
     private int anio;
@@ -21,7 +21,7 @@ public class Vehiculo {
     private int kilometraje;
     private String[] caracteristicas;
 
-    public Vehiculo(String id, String marca, String modelo, int anio, TipoVehiculo tipoVeiculo, EstadoVehiculo estadoVehiculo, float precio, int kilometraje, String[] caracteristicas) {
+    public Vehiculo(int id, String marca, String modelo, int anio, TipoVehiculo tipoVeiculo, EstadoVehiculo estadoVehiculo, float precio, int kilometraje, String[] caracteristicas) {
         this.id = id;
         this.marca = marca;
         this.modelo = modelo;
@@ -34,7 +34,7 @@ public class Vehiculo {
     }
 
     // Getters
-    public String getId() {
+    public Integer getId() {
         return this.id;
     }
 
@@ -70,6 +70,43 @@ public class Vehiculo {
         return this.caracteristicas;
     }
 
+    // Setters
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public void setModelo(String modelo) {
+        this.modelo = modelo;
+    }
+
+    public void setAnio(int anio) {
+        this.anio = anio;
+    }
+
+    public void setTipoVehiculo(TipoVehiculo tipoVehiculo) {
+        this.tipoVeiculo = tipoVehiculo;
+    }
+
+    public void setEstadoVehiculo(EstadoVehiculo estadoVehiculo) {
+        this.estadoVehiculo = estadoVehiculo;
+    }
+
+    public void setPrecio(float precio) {
+        this.precio = precio;
+    }
+
+    public void setKilometraje(int kilometraje) {
+        this.kilometraje = kilometraje;
+    }
+
+    public void setCaracteristicas(String[] caracteristicas) {
+        this.caracteristicas = caracteristicas;
+    }
+
 
     // Metodos
     public void crearVehiculo() {
@@ -96,5 +133,20 @@ public class Vehiculo {
         }
 
         return resultado;
+    }
+
+    @Override
+    public String toString() {
+        return "Vehiculo{" +
+                "id=" + id +
+                ", marca='" + marca + '\'' +
+                ", modelo='" + modelo + '\'' +
+                ", anio=" + anio +
+                ", tipoVeiculo=" + tipoVeiculo +
+                ", estadoVehiculo=" + estadoVehiculo +
+                ", precio=" + precio +
+                ", kilometraje=" + kilometraje +
+                ", caracteristicas=" + caracteristicas +
+                '}';
     }
 }
