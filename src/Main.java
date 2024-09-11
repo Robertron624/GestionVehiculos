@@ -1,15 +1,51 @@
 import models.Vehiculo;
 import models.Cliente;
+import models.Transportista;
+import models.Compra;
 
 public class Main {
-
     public static void main(String[] args) {
-        System.out.println("Bienvenido a la concesionaria de vehículos");
+        // Crear un vehículo
+        Vehiculo vehiculo = new Vehiculo(
+                111, "Toyota", "Corolla", 2020,
+                Vehiculo.TipoVehiculo.LIGERO, Vehiculo.EstadoVehiculo.NUEVO, 20000, 0,
+                new String[]{"Aire acondicionado", "GPS", "Bluetooth"}
+        );
 
-        Vehiculo vehiculo1 = new Vehiculo(1, "Toyota", "Corolla", 2020, Vehiculo.TipoVehiculo.LIGERO, Vehiculo.EstadoVehiculo.NUEVO, 20000, 10000, new String[]{"Aire acondicionado", "GPS"});
-        Vehiculo vehiculo2 = new Vehiculo(2, "Honda", "Civic", 2019, Vehiculo.TipoVehiculo.LIGERO, Vehiculo.EstadoVehiculo.USADO, 18000, 15000, new String[]{"Asientos de cuero", "Bluetooth"});
+        // Crear un cliente
+        Cliente cliente = new Cliente(
+                1, "Maria Lopez", "123 Calle Principal, Ciudad Ejemplo", "555-1234",
+                "usuario123@ejempo.com"
+        );
 
-        String comparacion = vehiculo1.compararCon(vehiculo2);
-        System.out.println(comparacion);
+        // Crear un transportista
+        Transportista transportista = new Transportista(
+                123, "Juan Perez", "555-9876"
+        );
+
+        // Imprimir información del vehículo
+        System.out.println("Vehículo:");
+        System.out.println("Marca: " + vehiculo.getMarca());
+        System.out.println("Modelo: " + vehiculo.getModelo());
+        System.out.println("Año: " + vehiculo.getAnio());
+        System.out.println("Precio: $" + vehiculo.getPrecio());
+        System.out.println("Estado: " + vehiculo.getEstadoVehiculo());
+        System.out.println("Tipo: " + vehiculo.getTipoVehiculo());
+
+        // Imprimir información del cliente
+        System.out.println("\nCliente:");
+        System.out.println("Nombre: " + cliente.getNombre());
+        System.out.println("Dirección: " + cliente.getDireccion());
+        System.out.println("Teléfono: " + cliente.getTelefono());
+
+        // Asignar el vehículo para ser transportado a la dirección del cliente
+        System.out.println("\nAsignando transporte...");
+        transportista.asignarEntrega(vehiculo, cliente.getDireccion());
+
+        // Simular compra
+        System.out.println("\nProcesando compra...");
+        Compra resultadoCompra = cliente.comprarVehiculo(vehiculo);
+        System.out.println("Compra realizada con la siguiente información:");
+        System.out.println(resultadoCompra);
     }
 }

@@ -7,13 +7,15 @@ public class Cliente {
     private String nombre;
     private String direccion;
     private String telefono;
+    private String email;
 
     // Constructor
-    public Cliente(int id, String nombre, String direccion, String telefono) {
+    public Cliente(int id, String nombre, String direccion, String telefono, String email) {
         this.id = id;
         this.nombre = nombre;
         this.direccion = direccion;
         this.telefono = telefono;
+        this.email = email;
     }
 
     // Getters y Setters
@@ -49,6 +51,14 @@ public class Cliente {
         this.telefono = telefono;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     // Métodos de la clase
 
     void registrarse() {
@@ -64,7 +74,7 @@ public class Cliente {
     }
 
     // Métodos de la clase
-    Compra comprarVehiculo(Vehiculo vehiculo) {
+    public Compra comprarVehiculo(Vehiculo vehiculo) {
         System.out.println("Comprando vehículo para el cliente " + this.nombre);
 
         // Crear una nueva compra

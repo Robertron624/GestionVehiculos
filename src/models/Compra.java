@@ -76,6 +76,19 @@ public class Compra {
         this.estadoCompra = estadoCompra;
     }
 
+    // Sobrescribiendo la funcion toString() para mejorar la salida
+    @Override
+    public String toString() {
+        return "Compra{" +
+                "ID: " + id +
+                ", Cliente: " + cliente.getNombre() +
+                ", Vehículo: " + vehiculo.getMarca() + " " + vehiculo.getModelo() +
+                ", Monto total: $" + montoTotal +
+                ", Fecha de compra: " + fechaCompra +
+                ", Estado: " + estadoCompra +
+                '}';
+    }
+
     // Metodos de la clase
     public void procesarCompra() {
         // Lógica para procesar la compra

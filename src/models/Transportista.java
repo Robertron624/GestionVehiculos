@@ -1,19 +1,19 @@
 package models;
 
 public class Transportista {
-    private String id;            // Identificador único del transportista
-    private String nombre;        // Nombre del transportista
-    private String telefono;      // Teléfono de contacto
+    private int id;
+    private String nombre;
+    private String telefono;
 
     // Constructor
-    public Transportista(String id, String nombre, String telefono) {
+    public Transportista(int id, String nombre, String telefono) {
         this.id = id;
         this.nombre = nombre;
         this.telefono = telefono;
     }
 
     // Getters
-    public String getId() {
+    public int getId() {
         return id;
     }
 
@@ -26,7 +26,7 @@ public class Transportista {
     }
 
     // Setters
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
