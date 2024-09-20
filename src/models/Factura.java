@@ -81,4 +81,8 @@ public class Factura {
             return false;
         }
     }
+
+    boolean ordenEstaGenerada() {
+        return generada;
+    }
 }
