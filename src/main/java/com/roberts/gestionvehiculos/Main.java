@@ -1,50 +1,66 @@
 package com.roberts.gestionvehiculos;
 
-import com.roberts.gestionvehiculos.models.Cliente;
-import com.roberts.gestionvehiculos.models.Vehiculo;
-import com.roberts.gestionvehiculos.models.Transportista;
-import com.roberts.gestionvehiculos.models.Compra;
+import com.roberts.gestionvehiculos.database.DatabaseConnection;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class Main {
         public static void main(String[] args) {
-                // Crear un vehículo
-                Vehiculo vehiculo = new Vehiculo(
-                                111, "Toyota", "Corolla", 2020,
-                                Vehiculo.TipoVehiculo.LIGERO, Vehiculo.EstadoVehiculo.NUEVO, 20000, 0,
-                                new String[] { "Aire acondicionado", "GPS", "Bluetooth" });
+                Connection connection = DatabaseConnection.getConnection();
 
-                // Crear un cliente
-                Cliente cliente = new Cliente(
-                                1, "Maria Lopez", "123 Calle Principal, Ciudad Ejemplo", "555-1234",
-                                "usuario123@ejempo.com");
+                if (connection != null) {
+                        System.out.println("Conexión a la base de datos establecida en clase Main.");
+                        try {
+                                Statement statement = connection.createStatement();
 
-                // Crear un transportista
-                Transportista transportista = new Transportista(
-                                123, "Juan Perez", "555-9876");
+                                // Ejemplo para traer todos los vehículos
+                                String sqlVehiculo = "SELECT * FROM Vehiculo";
+                                ResultSet resultSetVehiculo = statement.executeQuery(sqlVehiculo);
 
-                // Imprimir información del vehículo
-                System.out.println("Vehículo:");
-                System.out.println("Marca: " + vehiculo.getMarca());
-                System.out.println("Modelo: " + vehiculo.getModelo());
-                System.out.println("Año: " + vehiculo.getAnio());
-                System.out.println("Precio: $" + vehiculo.getPrecio());
-                System.out.println("Estado: " + vehiculo.getEstadoVehiculo());
-                System.out.println("Tipo: " + vehiculo.getTipoVehiculo());
+                                System.out.println("=========================================");
+                                System.out.println("Vehículos:");
 
-                // Imprimir información del cliente
-                System.out.println("\nCliente:");
-                System.out.println("Nombre: " + cliente.getNombre());
-                System.out.println("Dirección: " + cliente.getDireccion());
-                System.out.println("Teléfono: " + cliente.getTelefono());
+                                while (resultSetVehiculo.next()) {
+                                        System.out.println("ID: " + resultSetVehiculo.getInt("id"));
+                                        System.out.println("Marca: " + resultSetVehiculo.getString("marca"));
+                                        System.out.println("Modelo: " + resultSetVehiculo.getString("modelo"));
+                                        System.out.println("Año: " + resultSetVehiculo.getInt("anio"));
+                                        System.out.println("Precio: " + resultSetVehiculo.getDouble("precio"));
+                                        System.out.println("Estado: " + resultSetVehiculo.getString("estadoVehiculo"));
+                                        System.out.println("Tipo: " + resultSetVehiculo.getString("tipoVehiculo"));
+                                        System.out.println(
+                                                        "Kilometraje: " + resultSetVehiculo.getString("kilometraje"));
+                                        System.out.println();
+                                }
 
-                // Asignar el vehículo para ser transportado a la dirección del cliente
-                System.out.println("\nAsignando transporte...");
-                transportista.asignarEntrega(vehiculo, cliente.getDireccion());
+                                resultSetVehiculo.close();
 
-                // Simular compra
-                System.out.println("\nProcesando compra...");
-                Compra resultadoCompra = cliente.comprarVehiculo(vehiculo);
-                System.out.println("Compra realizada con la siguiente información:");
-                System.out.println(resultadoCompra);
+                                // Ejemplo para traer todos los clientes
+                                String sqlCliente = "SELECT * FROM Cliente";
+                                ResultSet resultSetCliente = statement.executeQuery(sqlCliente);
+
+                                System.out.println("=========================================");
+                                System.out.println("Clientes:");
+                                while (resultSetCliente.next()) {
+                                        System.out.println("ID: " + resultSetCliente.getInt("id"));
+                                        System.out.println("Nombre: " + resultSetCliente.getString("nombre"));
+                                        System.out.println("Dirección: " + resultSetCliente.getString("direccion"));
+                                        System.out.println("Teléfono: " + resultSetCliente.getString("telefono"));
+                                        System.out.println("Email: " + resultSetCliente.getString("email"));
+                                        System.out.println();
+                                }
+
+                                resultSetCliente.close();
+
+                                statement.close();
+                                connection.close();
+                        } catch (Exception e) {
+                                e.printStackTrace();
+                                System.err.println("Error al ejecutar la consulta: " + e.getMessage());
+                        }
+                } else {
+                        System.err.println("Conexión a la base de datos no establecida.");
+                }
         }
 }
