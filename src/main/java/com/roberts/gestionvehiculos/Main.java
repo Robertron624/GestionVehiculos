@@ -4,57 +4,56 @@ import com.roberts.gestionvehiculos.database.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
+
+import com.roberts.gestionvehiculos.models.Vehiculo;
+import com.roberts.gestionvehiculos.models.Cliente;
 
 public class Main {
         public static void main(String[] args) {
                 Connection connection = DatabaseConnection.getConnection();
 
                 if (connection != null) {
-                        System.out.println("Conexión a la base de datos establecida en clase Main.");
                         try {
-                                Statement statement = connection.createStatement();
+                                List<Vehiculo> vehiculos = Vehiculo.obtenerVehiculos(connection);
 
-                                // Ejemplo para traer todos los vehículos
-                                String sqlVehiculo = "SELECT * FROM Vehiculo";
-                                ResultSet resultSetVehiculo = statement.executeQuery(sqlVehiculo);
-
-                                System.out.println("=========================================");
                                 System.out.println("Vehículos:");
 
-                                while (resultSetVehiculo.next()) {
-                                        System.out.println("ID: " + resultSetVehiculo.getInt("id"));
-                                        System.out.println("Marca: " + resultSetVehiculo.getString("marca"));
-                                        System.out.println("Modelo: " + resultSetVehiculo.getString("modelo"));
-                                        System.out.println("Año: " + resultSetVehiculo.getInt("anio"));
-                                        System.out.println("Precio: " + resultSetVehiculo.getDouble("precio"));
-                                        System.out.println("Estado: " + resultSetVehiculo.getString("estadoVehiculo"));
-                                        System.out.println("Tipo: " + resultSetVehiculo.getString("tipoVehiculo"));
-                                        System.out.println(
-                                                        "Kilometraje: " + resultSetVehiculo.getString("kilometraje"));
-                                        System.out.println();
+                                for (Vehiculo vehiculo : vehiculos) {
+                                        System.out.println(vehiculo);
                                 }
 
-                                resultSetVehiculo.close();
+                                System.out.println("============================\n");
 
-                                // Ejemplo para traer todos los clientes
-                                String sqlCliente = "SELECT * FROM Cliente";
-                                ResultSet resultSetCliente = statement.executeQuery(sqlCliente);
+                                System.out.println("Vehículo con id 1:");
 
-                                System.out.println("=========================================");
+                                Vehiculo vehiculo = Vehiculo.obtenerVehiculoPorId(connection, 1);
+
+                                System.out.println(vehiculo);
+
+                                System.out.println("============================\n");
+
                                 System.out.println("Clientes:");
-                                while (resultSetCliente.next()) {
-                                        System.out.println("ID: " + resultSetCliente.getInt("id"));
-                                        System.out.println("Nombre: " + resultSetCliente.getString("nombre"));
-                                        System.out.println("Dirección: " + resultSetCliente.getString("direccion"));
-                                        System.out.println("Teléfono: " + resultSetCliente.getString("telefono"));
-                                        System.out.println("Email: " + resultSetCliente.getString("email"));
-                                        System.out.println();
+
+                                List<Cliente> clientes = Cliente.obtenerClientes(connection);
+
+                                for (Cliente cliente : clientes) {
+                                        System.out.println(cliente);
                                 }
 
-                                resultSetCliente.close();
+                                System.out.println("============================\n");
 
-                                statement.close();
+                                System.out.println("Cliente con id 1:");
+
+                                Cliente cliente = Cliente.obtenerClientePorId(connection, 1);
+
+                                System.out.println(cliente);
+
                                 connection.close();
+
+                                // Finalizamos la ejecución
+                                System.out.println("Finalizando la ejecución...");
+                                System.exit(0);
                         } catch (Exception e) {
                                 e.printStackTrace();
                                 System.err.println("Error al ejecutar la consulta: " + e.getMessage());
