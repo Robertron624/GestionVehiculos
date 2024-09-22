@@ -1,4 +1,4 @@
-package models;
+package com.roberts.gestionvehiculos.models;
 
 public class Transportista {
     private int id;
@@ -38,7 +38,7 @@ public class Transportista {
         this.telefono = telefono;
     }
 
-    //asignar una entrega a un transportista
+    // asignar una entrega a un transportista
     public void asignarEntrega(Vehiculo vehiculo, String direccionEntrega) {
         System.out.println("El transportista " + this.nombre + " ha sido asignado para transportar el vehículo: ");
         System.out.println("Marca: " + vehiculo.getMarca() + ", Modelo: " + vehiculo.getModelo());

@@ -1,4 +1,4 @@
-package models;
+package com.roberts.gestionvehiculos.models;
 
 import java.util.Date;
 
@@ -105,6 +105,5 @@ public class Cliente {
                 ", direccion='" + direccion + '\'' +
                 ", telefono='" + telefono + '\'' + '}';
     }
-
 
 }

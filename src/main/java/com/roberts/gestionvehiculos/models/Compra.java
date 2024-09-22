@@ -1,10 +1,9 @@
-package models;
+package com.roberts.gestionvehiculos.models;
 
 import java.util.Date;
 import java.util.Optional;
 
 public class Compra {
-
 
     public enum EstadoCompra {
         PENDIENTE, COMPLETADA, CANCELADA
@@ -92,10 +91,11 @@ public class Compra {
     // Metodos de la clase
     public void procesarCompra() {
         // Lógica para procesar la compra
-        System.out.println("Procesando la compra del vehículo " + vehiculo.getModelo() + " por el cliente " + cliente.getNombre() + " por un monto de $" + montoTotal + ".");
+        System.out.println("Procesando la compra del vehículo " + vehiculo.getModelo() + " por el cliente "
+                + cliente.getNombre() + " por un monto de $" + montoTotal + ".");
     }
 
-    //Puede haber un error al generar la factura, por lo que se retorna un Optional
+    // Puede haber un error al generar la factura, por lo que se retorna un Optional
     public Optional<Factura> generarFactura() {
 
         Factura factura = new Factura(1, this.cliente, this.vehiculo, this.fechaCompra, this.montoTotal);

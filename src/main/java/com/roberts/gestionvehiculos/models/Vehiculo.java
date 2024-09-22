@@ -1,7 +1,6 @@
-package models;
+package com.roberts.gestionvehiculos.models;
 
 public class Vehiculo {
-
 
     public enum TipoVehiculo {
         LIGERO, PESADO, ESPECIAL, AGRICOLA, OTRO
@@ -21,7 +20,8 @@ public class Vehiculo {
     private int kilometraje;
     private String[] caracteristicas;
 
-    public Vehiculo(int id, String marca, String modelo, int anio, TipoVehiculo tipoVeiculo, EstadoVehiculo estadoVehiculo, float precio, int kilometraje, String[] caracteristicas) {
+    public Vehiculo(int id, String marca, String modelo, int anio, TipoVehiculo tipoVeiculo,
+            EstadoVehiculo estadoVehiculo, float precio, int kilometraje, String[] caracteristicas) {
         this.id = id;
         this.marca = marca;
         this.modelo = modelo;
@@ -106,7 +106,6 @@ public class Vehiculo {
     public void setCaracteristicas(String[] caracteristicas) {
         this.caracteristicas = caracteristicas;
     }
-
 
     // Metodos
     public void crearVehiculo() {
