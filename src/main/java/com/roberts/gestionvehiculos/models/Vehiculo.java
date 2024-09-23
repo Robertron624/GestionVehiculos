@@ -20,6 +20,11 @@ public class Vehiculo {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
+
+                String caracteristicasString = resultSet.getString("caracteristicas");
+                String[] caracteristicas = caracteristicasString != null ? caracteristicasString.split(",")
+                        : new String[0];
+
                 Vehiculo vehiculo = new Vehiculo(
                         resultSet.getString("marca"),
                         resultSet.getString("modelo"),
@@ -28,7 +33,7 @@ public class Vehiculo {
                         EstadoVehiculo.valueOf(resultSet.getString("estadoVehiculo")),
                         resultSet.getFloat("precio"),
                         resultSet.getInt("kilometraje"),
-                        null);
+                        caracteristicas);
                 vehiculo.setId(resultSet.getInt("id"));
                 vehiculos.add(vehiculo);
             }
@@ -52,6 +57,11 @@ public class Vehiculo {
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
+
+                String caracteristicasString = resultSet.getString("caracteristicas");
+                String[] caracteristicas = caracteristicasString != null ? caracteristicasString.split(",")
+                        : new String[0];
+
                 vehiculo = new Vehiculo(
                         resultSet.getString("marca"),
                         resultSet.getString("modelo"),
@@ -60,7 +70,7 @@ public class Vehiculo {
                         EstadoVehiculo.valueOf(resultSet.getString("estadoVehiculo")),
                         resultSet.getFloat("precio"),
                         resultSet.getInt("kilometraje"),
-                        null);
+                        caracteristicas);
                 vehiculo.setId(resultSet.getInt("id"));
             }
 
@@ -72,6 +82,72 @@ public class Vehiculo {
         }
 
         return vehiculo;
+    }
+
+    public static List<Vehiculo> filtrarHastaAnio(Connection connection, int anio) throws SQLException {
+        List<Vehiculo> vehiculos = new ArrayList<>();
+        String sql = "SELECT id, marca, modelo, anio, estado FROM Vehiculo WHERE anio <= ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, anio);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+
+                    String caracteristicasString = rs.getString("caracteristicas");
+                    String[] caracteristicas = caracteristicasString != null ? caracteristicasString.split(",")
+                            : new String[0];
+
+                    Vehiculo vehiculo = new Vehiculo(
+                            rs.getString("marca"),
+                            rs.getString("modelo"),
+                            rs.getInt("anio"),
+                            TipoVehiculo.valueOf(rs.getString("tipo_vehiculo").toUpperCase()), // Convertir string a
+                                                                                               // TipoVehiculo
+                            EstadoVehiculo.valueOf(rs.getString("estado_vehiculo").toUpperCase()), // Convertir string a
+                                                                                                   // EstadoVehiculo
+                            rs.getFloat("precio"),
+                            rs.getInt("kilometraje"),
+                            caracteristicas);
+                    vehiculos.add(vehiculo);
+                }
+            }
+        }
+
+        return vehiculos;
+    }
+
+    // Método estático para obtener vehículos desde un año específico (incluyendo
+    // ese año y hacia arriba)
+    public static List<Vehiculo> filtrarDesdeAnio(Connection connection, int anio) throws SQLException {
+        List<Vehiculo> vehiculos = new ArrayList<>();
+        String sql = "SELECT id, marca, modelo, anio, estado FROM Vehiculo WHERE anio >= ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, anio);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+
+                    String caracteristicasString = rs.getString("caracteristicas");
+                    String[] caracteristicas = caracteristicasString != null ? caracteristicasString.split(",")
+                            : new String[0];
+
+                    Vehiculo vehiculo = new Vehiculo(
+                            rs.getString("marca"),
+                            rs.getString("modelo"),
+                            rs.getInt("anio"),
+                            TipoVehiculo.valueOf(rs.getString("tipo_vehiculo").toUpperCase()), // Convertir string a
+                                                                                               // TipoVehiculo
+                            EstadoVehiculo.valueOf(rs.getString("estado_vehiculo").toUpperCase()), // Convertir string a
+                                                                                                   // EstadoVehiculo
+                            rs.getFloat("precio"),
+                            rs.getInt("kilometraje"),
+                            caracteristicas);
+                    vehiculos.add(vehiculo);
+                }
+            }
+        }
+
+        return vehiculos;
     }
 
     // Definición de enumeraciones
@@ -182,7 +258,7 @@ public class Vehiculo {
 
     // Metodos que interactuan con la base de datos
     public void crearVehiculo(Connection connection) {
-        String sql = "INSERT INTO Vehiculo (marca, modelo, anio, tipoVehiculo, estadoVehiculo, precio, kilometraje) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Vehiculo (marca, modelo, anio, tipoVehiculo, estadoVehiculo, precio, kilometraje, caracteristicas) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, this.marca);
             statement.setString(2, this.modelo);
@@ -191,6 +267,11 @@ public class Vehiculo {
             statement.setString(5, this.estadoVehiculo.name());
             statement.setFloat(6, this.precio);
             statement.setInt(7, this.kilometraje);
+
+            // Convertir el array de características a un string
+            String caracteristicasString = String.join(",", this.caracteristicas);
+
+            statement.setString(8, caracteristicasString);
 
             // Ejecutar la inserción
             int rowsInserted = statement.executeUpdate();
@@ -213,7 +294,7 @@ public class Vehiculo {
     }
 
     public void actualizarVehiculo(Connection connection) {
-        String sql = "UPDATE Vehiculo SET marca = ?, modelo = ?, anio = ?, tipoVehiculo = ?, estadoVehiculo = ?, precio = ?, kilometraje = ? WHERE id = ?";
+        String sql = "UPDATE Vehiculo SET marca = ?, modelo = ?, anio = ?, tipoVehiculo = ?, estadoVehiculo = ?, precio = ?, kilometraje = ?, caracteristicas = ?, WHERE id = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, this.marca);
             statement.setString(2, this.modelo);
@@ -222,7 +303,13 @@ public class Vehiculo {
             statement.setString(5, this.estadoVehiculo.name());
             statement.setFloat(6, this.precio);
             statement.setInt(7, this.kilometraje);
-            statement.setInt(8, this.id);
+
+            // Convertir el array de características a un string
+            String caracteristicasString = String.join(",", this.caracteristicas);
+
+            statement.setString(8, caracteristicasString);
+
+            statement.setInt(9, this.id); // Usamos el id para identificar el vehículo a actualizar
 
             // Ejecutar la actualización
             int rowsUpdated = statement.executeUpdate();

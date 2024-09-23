@@ -67,6 +67,35 @@ public class Cliente {
         return cliente;
     }
 
+    public List<String> consultarFacturas(Connection connection) throws SQLException {
+        List<String> facturas = new ArrayList<>();
+
+        // Consulta SQL para obtener las facturas asociadas al cliente
+        String sql = "SELECT Factura.id, Factura.fecha, Factura.monto_total "
+                + "FROM Factura "
+                + "JOIN Envio ON Factura.envio_id = Envio.id "
+                + "WHERE Envio.remitente_id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, this.id); // El cliente actual (remitente)
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    // Crear un string con la información de cada factura
+                    String facturaInfo = "ID de Factura: " + rs.getInt("id") + "\n"
+                            + "Fecha: " + rs.getString("fecha") + "\n"
+                            + "Monto Total: " + rs.getDouble("monto_total");
+                    facturas.add(facturaInfo);
+                }
+            }
+        }
+
+        if (facturas.isEmpty()) {
+            facturas.add("No se encontraron facturas para el cliente: " + this.nombre);
+        }
+
+        return facturas; // Devuelve una lista de strings con la información de las facturas
+    }
+
     // Atributos
     private int id;
     private String nombre;
